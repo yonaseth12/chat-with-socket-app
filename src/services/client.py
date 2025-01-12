@@ -11,3 +11,9 @@ Client():
 
     def set_address(self, SERVER, PORT):
         self.ADDR = (SERVER, PORT)
+        
+    def initiate_request_handler(self):
+        while True:
+            conn, address = self.server.accept()
+            new_thread = threading.Thread(target=self.handle_client, args=(conn, address))
+            new_thread.start()
