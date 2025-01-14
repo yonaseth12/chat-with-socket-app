@@ -17,3 +17,18 @@ Client():
             conn, address = self.server.accept()
             new_thread = threading.Thread(target=self.handle_client, args=(conn, address))
             new_thread.start()
+            
+    def handle_client(self, conn, address):
+        print(f"[NEW CONNECTION] {address} connected.")
+        is_alive = True
+        while is_alive:
+            message_leng = conn.recv(self.HEADER_LENGTH).decode(self.FORMAT)
+            message_length = int(message_leng)
+            message = conn.recv(message_length).decode(self.FORMAT)
+            if message == self.DISCONNECT_MESSAGE:
+                is_alive = False
+            print(f'[NEW MESSAGE] from {address} : {message}')
+        conn.close()
+
+    def count_active_users(self):
+        return threading.activeCount() - 1
