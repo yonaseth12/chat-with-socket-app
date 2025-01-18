@@ -32,3 +32,9 @@ Client():
 
     def count_active_users(self):
         return threading.activeCount() - 1
+        
+    def initiate_request_handler(self):
+        while True:
+            conn, address = self.server.accept()
+            new_thread = threading.Thread(target=self.handle_client, args=(conn, address))
+            new_thread.start()
