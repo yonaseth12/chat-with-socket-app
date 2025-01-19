@@ -38,3 +38,15 @@ Client():
             conn, address = self.server.accept()
             new_thread = threading.Thread(target=self.handle_client, args=(conn, address))
             new_thread.start()
+            
+    def send_dose(dose_value):
+        try:
+            sio.emit('dose', {'dose_value': dose_value})
+            print(f"Dose message sent with value: {dose_value}")
+        except Exception as e:
+            print("Failed to send dose message:", e)
+    
+    def handle_acknowledgment():
+        @sio.on('dose_ack')
+        def on_dose_ack(data):
+            print("Acknowledgment received from server:", data)
