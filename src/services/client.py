@@ -43,7 +43,7 @@ Client():
         try:
             sio.emit('dose', {'dose_value': dose_value})
             print(f"Dose message sent with value: {dose_value}")
-        except Exception as e:
+        except NetworkException as e:
             print("Failed to send dose message:", e)
     
     def handle_acknowledgment():
