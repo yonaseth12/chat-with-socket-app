@@ -60,5 +60,4 @@ Client():
             message = conn.recv(message_length).decode(self.FORMAT)
             if message == self.DISCONNECT_MESSAGE:
                 is_alive = False
-            print(f'[NEW MESSAGE] from {address} : {message}')
         conn.close()
