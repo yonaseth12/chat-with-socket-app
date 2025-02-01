@@ -22,6 +22,7 @@ class Client:
         msg_length = len(message)
         send_length = str(msg_length).encode(self.FORMAT)
         send_length += b' ' * (self.HEADER - len(send_length))
+        self.client.send(send_length)
         self.client.send(message)
 
 
