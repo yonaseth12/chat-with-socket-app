@@ -53,7 +53,7 @@ class Server():
                 self.broadcast_message(conn, message_leng_encoded, message_encoded)
         conn.close()
         print(f'[CLOSE CONNECTION] {address} is disconnected.')
-        self.connected_clients.remove((conn, address))
+        del self.connected_clients[threading.current_thread().ident]
     
     def broadcast_message(self, source_conn, message_length_enc, message_enc):
         for thread in threading.enumerate():        # Iterating over all current threads
