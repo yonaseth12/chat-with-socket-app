@@ -1,0 +1,15 @@
+<LoadingScreen>:
+    name: "loading"
+    BoxLayout:
+        orientation: 'vertical'
+        spacing: dp(10)
+        padding: dp(20)
+        MDLabel:
+            text: "Loading..."
+            halign: "center"
+            theme_text_color: "Primary"
+        MDSpinner:
+            size_hint: None, None
+            size: dp(48), dp(48)
+            pos_hint: {"center_x": 0.5}
+            active: True

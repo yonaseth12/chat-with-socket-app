@@ -1,0 +1,14 @@
+<IntroScreen>:
+    name: "intro"
+    BoxLayout:
+        orientation: "vertical"
+        spacing: dp(10)
+        padding: dp(20)
+        MDLabel:
+            text: "Welcome to Talkie Chat!"
+            font_style: "H5"
+            halign: "center"
+        MDRaisedButton:
+            text: "Continue"
+            pos_hint: {"center_x": 0.5}
+            on_release: app.root.current = "role_choice"
