@@ -1,63 +1,57 @@
-Client():
-    def __init__(self, PORT):
-        self.PORT = PORT if PORT else 5050
-        self.SERVER = socket.gethostbyname(socket.gethostname())
-        self.set_address(self.SERVER, self.PORT)
+import socket
+import threading
+import time
+
+class Client:
+
+    def __init__(self, server_addr):
+        self.SERVER = server_addr
 
         self.HEADER_LENGTH = 64
         self.FORMAT = 'utf-8'
         self.DISCONNECT_MESSAGE = "!DISCONNECT"
+        self.sendbtn_pressed = False
+
+        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+        self.client.connect(self.SERVER)
+        self.start()
 
 
-    def set_address(self, SERVER, PORT):
-        self.ADDR = (SERVER, PORT)
-        
-    def initiate_request_handler(self):
-        while True:
-            conn, address = self.server.accept()
-            new_thread = threading.Thread(target=self.handle_client, args=(conn, address))
-            new_thread.start()
-            
-    def handle_client(self, conn, address):
-        print(f"[NEW CONNECTION] {address} connected.")
+    def send(self, message):
+        message = message.encode(self.FORMAT)
+        msg_length = len(message)
+        send_length = str(msg_length).encode(self.FORMAT)
+        send_length += b' ' * (self.HEADER - len(send_length))
+        self.client.send(message)
+
+
+    def receive_handler(self):
         is_alive = True
         while is_alive:
-            message_leng = conn.recv(self.HEADER_LENGTH).decode(self.FORMAT)
-            message_length = int(message_leng)
-            message = conn.recv(message_length).decode(self.FORMAT)
-            if message == self.DISCONNECT_MESSAGE:
-                is_alive = False
-            print(f'[NEW MESSAGE] from {address} : {message}')
-        conn.close()
+            message_leng = self.client.recv(self.HEADER_LENGTH).decode(self.FORMAT)
+            if message_leng:                                        # There is an automatic blank message sent during connection initiation
+                message_length = int(message_leng)
+                message = self.client.recv(message_length).decode(self.FORMAT)
+                if message == self.DISCONNECT_MESSAGE:
+                    is_alive = False
+                print(f'[NEW MESSAGE] Incoming : {message}')
 
-    def count_active_users(self):
-        return threading.activeCount() - 1
-        
-    def initiate_request_handler(self):
-        while True:
-            conn, address = self.server.accept()
-            new_thread = threading.Thread(target=self.handle_client, args=(conn, address))
-            new_thread.start()
-            
-    def send_dose(dose_value):
+
+    def send_handler(self):
         try:
-            sio.emit('dose', {'dose_value': dose_value})
-            print(f"Dose message sent with value: {dose_value}")
-        except NetworkException as e:
-            print("Failed to send dose message:", e)
-    
-    def handle_acknowledgment():
-        @sio.on('dose_ack')
-        def on_dose_ack(data):
-            print("Acknowledgment received from server:", data)
-            
-    def handle_server(self, conn, address):
-        print(f"[NEW CONNECTION] {address} connected.")
-        is_alive = True
-        while is_alive:
-            message_leng = conn.recv(self.HEADER_LENGTH).decode(self.FORMAT)
-            message_length = int(message_leng)
-            message = conn.recv(message_length).decode(self.FORMAT)
-            if message == self.DISCONNECT_MESSAGE:
-                is_alive = False
-        conn.close()
+            while True:
+                if self.sendbtn_pressed:
+                    message_to_send = "Mesaage from client"
+                    if message_to_send:
+                        self.send(message_to_send)
+                    self.sendbtn_pressed = False
+                time.sleep(1)
+                
+        except Exception as e:
+            print("Connection has been lost")
+
+    def start(self):
+        receiver_thread = threading.Thread(target=self.receive_handler)
+        receiver_thread.start()
+        sender_thread = threading.Thread(target=self.send_handler)
+        sender_thread.start()
