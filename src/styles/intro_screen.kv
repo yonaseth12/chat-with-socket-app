@@ -4,11 +4,28 @@
         orientation: "vertical"
         spacing: dp(10)
         padding: dp(20)
-        MDLabel:
-            text: "Welcome to Talkie Chat!"
-            font_style: "H5"
-            halign: "center"
+        AnchorLayout:
+            anchor_x: "center"
+            anchor_y: "center"
+            MDLabel:
+                text: "Welcome to Talkie Chat!"
+                font_style: "H5"
+                halign: "center"
+                font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
+        Image:
+            source: "src/assets/chat_socket_app_intro_image-removebg.png"
+            # size_hint: None, None
+            size: dp(150), dp(150)
+            pos_hint: {"center_x": 0.5}
+        Widget: 
+            size_hint_y: None
+            height: dp(50)
+
         MDRaisedButton:
             text: "Continue"
+            font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
             pos_hint: {"center_x": 0.5}
             on_release: app.root.current = "role_choice"
+        Widget:
+            size_hint_y: None
+            height: dp(100) 

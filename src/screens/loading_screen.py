@@ -16,8 +16,18 @@ except Exception as e:
 
 class LoadingScreen(Screen):
     def on_enter(self):
+        
         print("LoadingScreen entered. Transitioning in 3 seconds...")
-        Clock.schedule_once(self.switch_to_intro, 3)
+        
+        # List of animated texts to cycle through
+        self.loading_texts = ["Loading", "Loading.", "Loading..", "Loading..."]
+        self.current_index = 0
+        
+        # Update the label every 0.5 seconds
+        Clock.schedule_interval(self.update_text, 1)
+        
+        Clock.schedule_once(self.switch_to_intro, 5)
+        
 
     def switch_to_intro(self, dt):
         if self.manager:
@@ -25,3 +35,8 @@ class LoadingScreen(Screen):
             self.manager.current = "intro"
         else:
             print("Error: ScreenManager is not set!")
+
+    def update_text(self, dt):
+        # Update the text of the MDLabel using its id
+        self.ids.loading_label.text = self.loading_texts[self.current_index]
+        self.current_index = (self.current_index + 1) % len(self.loading_texts)
