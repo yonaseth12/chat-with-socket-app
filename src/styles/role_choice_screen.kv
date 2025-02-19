@@ -1,0 +1,75 @@
+<RoleChoiceScreen>:
+    name: "role_choice"
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(20)
+        spacing: dp(20)
+
+        MDLabel:
+            text: "Select an Option"
+            halign: "center"
+            font_style: "H4"
+            font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
+
+        BoxLayout:
+            orientation: "horizontal"
+            spacing: dp(20)
+            size_hint_y: None
+            height: dp(220) 
+
+            MDCard:
+                orientation: "vertical"
+                padding: dp(10)
+                size_hint: 0.5, 1
+                ripple_behavior: True
+                on_release: root.create_group() 
+                md_bg_color: 1, 1, 1, 0.2  
+                radius: [20]
+
+                Image:
+                    source: "src/assets/create_a_group.png"
+                    allow_stretch: True
+                    keep_ratio: True
+                    size_hint_y: 0.7
+                    pos_hint: {"center_x": 0.5}
+
+                MDLabel:
+                    text: "Create a Group"
+                    halign: "center"
+                    font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
+                    size_hint_y: 0.3
+
+            MDCard:
+                orientation: "vertical"
+                padding: dp(10)
+                size_hint: 0.5, 1
+                ripple_behavior: True
+                on_release: root.join_group()
+                md_bg_color: 1, 1, 1, 0.2 
+
+                Image:
+                    source: "src/assets/join_a_group.png"
+                    allow_stretch: True
+                    keep_ratio: True
+                    size_hint_y: 0.7
+                    pos_hint: {"center_x": 0.5}
+
+                MDLabel:
+                    text: "Join a Group"
+                    halign: "center"
+                    font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
+                    size_hint_y: 0.3
+
+        Widget:
+            size_hint_y: None
+            height: dp(20)
+
+        MDRaisedButton:
+            text: "Continue"
+            pos_hint: {"center_x": 0.5}
+            font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
+            on_release: app.root.current = "next_screen" 
+
+        Widget:
+            size_hint_y: None
+            height: dp(20)
