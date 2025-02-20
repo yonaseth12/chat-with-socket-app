@@ -1,0 +1,83 @@
+<JoinGroupScreen>:
+    name: "join_group"
+
+    FloatLayout:
+        canvas.before:
+            Color:
+                rgba: 0.1, 0.1, 0.1, 1  # Dark background
+            Rectangle:
+                pos: self.pos
+                size: self.size
+
+        MDCard:
+            size_hint: 0.9, 0.5  # Adjusted size
+            pos_hint: {"center_x": 0.5, "center_y": 0.5}  # Centered
+            elevation: 10
+            radius: [20]  # Rounded edges
+            padding: dp(20)
+            spacing: dp(10)
+            md_bg_color: 0.2, 0.2, 0.2, 1  # Slightly lighter than background
+
+            BoxLayout:
+                orientation: "vertical"
+                spacing: dp(20)
+
+                Label:
+                    text: "Fill the group address\n below"
+                    font_size: "20sp"
+                    bold: True
+                    halign: "center"
+                    color: 1, 1, 1, 1
+                    size_hint_y: None
+                    height: dp(40)
+                    font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
+
+                Widget: 
+                    size_hint_y: None
+                    height: dp(200)
+
+                BoxLayout:
+                    orientation: "vertical"
+                    spacing: dp(5)
+                    
+                    Label:
+                        text: "IP Address:"
+                        size_hint_y: None
+                        height: dp(25)
+                        color: 0.8, 0.8, 0.8, 1
+                        font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
+
+                    MDTextField:
+                        id: ip_input
+                        mode: "fill"
+                        size_hint_y: None
+                        height: dp(45)
+                        radius: [10]
+                        md_bg_color: 0.3, 0.3, 0.3, 1
+                        font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
+
+                    Label:
+                        text: "Port:"
+                        size_hint_y: None
+                        height: dp(25)
+                        color: 0.8, 0.8, 0.8, 1
+                        font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
+
+                    MDTextField:
+                        id: port_input
+                        mode: "fill"
+                        input_filter: "int"
+                        size_hint_y: None
+                        height: dp(45)
+                        radius: [10]
+                        md_bg_color: 0.3, 0.3, 0.3, 1
+                        font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
+
+                MDRaisedButton:
+                    text: "Join Group"
+                    size_hint_x: 0.8
+                    pos_hint: {"center_x": 0.5}
+                    height: dp(50)
+                    md_bg_color: 0.1, 0.6, 1, 1  # Attractive blue color
+                    on_release: root.join_group()
+                    font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
