@@ -1,0 +1,23 @@
+<CreateAGroupScreen>:
+    BoxLayout:
+        orientation: "vertical"
+        padding: dp(20)
+        spacing: dp(10)
+
+        Label:
+            id: loading_label
+            font_size: "20sp"
+            font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
+            halign: "center"
+            valign: "middle"
+            size_hint_y: 0.8
+            text_size: self.width, None
+
+        MDFillRoundFlatButton:
+            id: enter_button
+            text: "Enter to My Group"
+            font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
+            opacity: 0  # Initially hidden
+            disabled: True
+            pos_hint: {"center_x": 0.5}
+            on_release: app.root.current = "some_other_screen"

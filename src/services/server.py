@@ -2,7 +2,7 @@ import socket
 import threading
 
 class Server():
-    def __init__(self, PORT):
+    def __init__(self, PORT = None):
         self.PORT = PORT if PORT else 5050
         self.SERVER = socket.gethostbyname(socket.gethostname())
         self.set_address(self.SERVER, self.PORT)

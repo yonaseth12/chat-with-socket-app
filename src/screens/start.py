@@ -7,6 +7,8 @@ from kivy.uix.screenmanager import ScreenManager, FadeTransition
 from screens.loading_screen import LoadingScreen
 from screens.intro_screen import IntroScreen
 from screens.role_choice_screen import RoleChoiceScreen
+from screens.create_a_group_screen import CreateAGroupScreen
+from screens.join_a_group_screen import JoinGroupScreen
 from screens.server_chat_screen import ServerChatScreen
 from screens.client_chat_screen import ClientChatScreen
 from screens.help_screen import HelpScreen
@@ -14,6 +16,11 @@ from screens.help_screen import HelpScreen
 
 
 class ChatApp(MDApp):
+    
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+        self.user_shared_data = {}
+        
     def build(self):
         # Setting up screen size
         if platform in ('android', 'ios'):
@@ -33,6 +40,8 @@ class ChatApp(MDApp):
             LoadingScreen(name='loading'),
             IntroScreen(name='intro'),
             RoleChoiceScreen(name='role_choice'),
+            CreateAGroupScreen(name='create_a_group'),
+            JoinGroupScreen(name='join_a_group'),
             ServerChatScreen(name='server_chat'),
             ClientChatScreen(name='client_chat'),
             HelpScreen(name='help')
