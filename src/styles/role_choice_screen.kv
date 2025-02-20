@@ -1,5 +1,7 @@
 <RoleChoiceScreen>:
     name: "role_choice"
+    selected_card: None  # Stores selected card
+
     BoxLayout:
         orientation: "vertical"
         padding: dp(20)
@@ -18,13 +20,14 @@
             height: dp(220) 
 
             MDCard:
+                id: create_group_card
                 orientation: "vertical"
                 padding: dp(10)
                 size_hint: 0.5, 1
                 ripple_behavior: True
-                on_release: root.create_group() 
-                md_bg_color: 1, 1, 1, 0.2  
                 radius: [20]
+                md_bg_color: (1, 1, 1, 1) if root.selected_card == "create" else (1, 1, 1, 0.2)  
+                on_release: root.select_card("create")
 
                 Image:
                     source: "src/assets/create_a_group.png"
@@ -40,12 +43,14 @@
                     size_hint_y: 0.3
 
             MDCard:
+                id: join_group_card
                 orientation: "vertical"
                 padding: dp(10)
                 size_hint: 0.5, 1
                 ripple_behavior: True
-                on_release: root.join_group()
-                md_bg_color: 1, 1, 1, 0.2 
+                radius: [20]
+                md_bg_color: (1, 1, 1, 1) if root.selected_card == "join" else (1, 1, 1, 0.2)  
+                on_release: root.select_card("join")
 
                 Image:
                     source: "src/assets/join_a_group.png"
@@ -68,7 +73,7 @@
             text: "Continue"
             pos_hint: {"center_x": 0.5}
             font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
-            on_release: app.root.current = "next_screen" 
+            on_release: root.confirm_selection()
 
         Widget:
             size_hint_y: None
