@@ -10,7 +10,7 @@
                 size: self.size
 
         MDCard:
-            size_hint: 0.9, 0.5  # Adjusted size
+            size_hint: 0.9, 0.5
             pos_hint: {"center_x": 0.5, "center_y": 0.5}  # Centered
             elevation: 10
             radius: [20]  # Rounded edges
@@ -79,6 +79,34 @@
                     size_hint_x: 0.8
                     pos_hint: {"center_x": 0.5}
                     height: dp(50)
-                    md_bg_color: 0.1, 0.6, 1, 1  # Attractive blue color
+                    md_bg_color: 0.1, 0.6, 1, 1
                     on_release: root.join_group()
                     font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
+
+     # Popup for showing information
+    MDFloatLayout:
+        id: popup
+        opacity: 0  # Initially hidden
+        size_hint: None, None
+        size: dp(280), dp(180)
+        pos_hint: {"center_x": 0.5, "center_y": 0.6}
+        md_bg_color: 0.15, 0.15, 0.15, 1  # Dark modal background
+        radius: [20]
+
+        MDLabel:
+            id: popup_label
+            text: "Trying to Join Group..."
+            theme_text_color: "Custom"
+            text_color: 1, 1, 1, 1
+            size_hint_x: 0.8
+            halign: "center"
+            font_size: "18sp"
+            pos_hint: {"center_x": 0.5, "center_y": 0.6}
+            font_name: "src/fonts/Sour_Gummy/SourGummy-VariableFont_wdth,wght.ttf"
+
+        MDIconButton:
+            icon: "close"
+            pos_hint: {"right": 1, "top": 1}
+            theme_text_color: "Custom"
+            text_color: 1, 0, 0, 1  # Red X button
+            on_release: root.close_popup()

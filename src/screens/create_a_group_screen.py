@@ -26,6 +26,7 @@ class CreateAGroupScreen(Screen):
     def create_server(self):
         user_server = Server()
         app = MDApp.get_running_app()
+        app.user_shared_data = {}
         app.user_shared_data["user_role"] = "server"
         app.user_shared_data["user_server"] = user_server
         

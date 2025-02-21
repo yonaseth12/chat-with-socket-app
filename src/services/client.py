@@ -1,3 +1,4 @@
+from binascii import Error
 import socket
 import threading
 import time
@@ -11,11 +12,13 @@ class Client:
         self.FORMAT = 'utf-8'
         self.DISCONNECT_MESSAGE = "!DISCONNECT"
         self.sendbtn_pressed = False
-
-        self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-        self.client.connect(self.SERVER)
+        try:    
+            self.client = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            self.client.connect(self.SERVER)
+        except Exception as e:
+            raise Error("Error has occurred while connecting to the server")
+        
         self.start()
-
 
     def send(self, message):
         message = message.encode(self.FORMAT)
