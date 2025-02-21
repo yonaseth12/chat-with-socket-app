@@ -1,5 +1,7 @@
 from kivy.uix.screenmanager import Screen
-from kivymd.app import MDApp
+from kivy.uix.label import Label
+from kivy.uix.widget import Widget
+from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.lang import Builder
 import os
 
@@ -18,9 +20,45 @@ except Exception as e:
 class ClientChatScreen(Screen):
 
     def send_message(self):
-        """Handles sending messages from input to chat."""
-        message = self.ids.message_input.text.strip()
-        if message:
-            self.ids.chat_list.add_message(message, True)  # True = Sent by user
-            self.ids.message_input.text = ""  # Clear input field
-     
+        message_text = self.ids.message_input.text.strip()
+        if message_text:
+            # Create a container for each message 
+            message_container = MDBoxLayout(
+                adaptive_height=True,  
+                padding=[10, 8, 15, 8],  # Add spacing inside
+                md_bg_color=(0.3, 0.3, 0.3, 1), 
+                radius=[10, 10, 0, 10],  
+                size_hint_x=None,  # Remove automatic width expansion
+                width=self.width * 0.6,  # Explicitly set width to 60% of the parent width
+                pos_hint={"right": 0.97}  # Align to the right
+            )
+
+            # Create the message label (multiline + right-aligned text)
+            message_label = Label(
+                text=message_text,
+                size_hint_x=1, 
+                halign="right",
+                valign="middle",
+                color=(1, 1, 1, 1), 
+                text_size=(self.width * 0.6 - 20, None),  # Set text wrapping width (subtract padding)
+                size_hint_y=None
+            )
+            message_label.bind(texture_size=message_label.setter("size"))  # Make it multiline
+
+            # Add label to message container
+            message_container.add_widget(message_label)
+
+            # Wrap the container inside another box to push it to the right
+            outer_box = MDBoxLayout(
+                size_hint_x=1,  
+                adaptive_height=True,
+                padding=[0, 5],  
+                md_bg_color=(0, 0, 0, 0)  
+            )
+            outer_box.add_widget(Widget())  # Add an empty widget for left spacing
+            outer_box.add_widget(message_container)  
+
+            self.ids.chat_list.add_widget(outer_box)
+
+            self.ids.message_input.text = ""
+
