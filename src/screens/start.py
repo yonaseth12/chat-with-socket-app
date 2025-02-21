@@ -1,7 +1,6 @@
 from kivy.utils import platform
 from kivy.core.window import Window
 from kivymd.app import MDApp
-from kivy.uix.boxlayout import BoxLayout
 from kivy.uix.screenmanager import ScreenManager, FadeTransition
 
 from screens.loading_screen import LoadingScreen
@@ -54,3 +53,7 @@ class ChatApp(MDApp):
         
         return self.window_manager
     
+    
+    def go_back(self, previous_page):
+        """Go back to the previous screen."""
+        self.root.current = previous_page

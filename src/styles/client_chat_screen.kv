@@ -1,0 +1,55 @@
+<ClientChatScreen>:
+    name: "client_chat"
+
+    MDFloatLayout:
+        md_bg_color: 0.1, 0.1, 0.1, 1  # Dark background - whole screen
+
+        # 📌 Top App Bar
+        MDTopAppBar:
+            title: "Talkie Chat"
+            font_size: "20sp"
+            left_action_items: [["arrow-left", lambda x: app.go_back("join_a_group")]]
+            right_action_items: [["dots-vertical", lambda x: print("More Options")]]
+            elevation: 3
+            pos_hint: {"top": 1}
+            md_bg_color: 0.2, 0.2, 0.2, 1
+
+        # 📌 Chat Area (Scrollable messages list)
+        ScrollView:
+            size_hint_y: 0.8
+            pos_hint: {"top": 0.9}
+            do_scroll_x: False
+
+            MDList:
+                id: chat_list  # Container for chat messages
+
+        # 📌 Bottom Input Field 
+        MDFloatLayout:
+            size_hint_y: None
+            height: dp(70)
+            pos_hint: {"y": 0.01, "center_x": 0.5}
+            size_hint_x: 0.95
+            md_bg_color: 0.12, 0.12, 0.12, 1
+            radius: [25]
+
+            # 📌 Message Input Field
+            MDTextField:
+                id: message_input
+                hint_text: "Type a message..."
+                hint_text_color: 0.6, 0.6, 0.6, 1 
+                mode: "rectangle"
+                size_hint_x: 0.8 
+                pos_hint: {"center_y": 0.5, "center_x": 0.45} 
+                multiline: False
+                padding: [15, 0]
+                line_color_normal: 0.3, 0.3, 0.3, 1
+
+                hint_text_color_normal: 0.8, 0.8, 0.8, 1  
+
+            # 📌 Send Button (Icon button)
+            MDIconButton:
+                icon: "send"
+                pos_hint: {"center_y": 0.5, "right": 1}
+                on_release: root.send_message()
+                theme_text_color: "Custom"
+                text_color: 0.4, 0.4, 0.4, 1  
