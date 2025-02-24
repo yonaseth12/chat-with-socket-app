@@ -68,7 +68,7 @@ class ClientChatScreen(Screen):
             message_container = MDBoxLayout(
                 adaptive_height=True,  
                 padding=[10, 8, 15, 8],  # Add spacing inside
-                md_bg_color=(0.3, 0.3, 0.3, 1), 
+                md_bg_color=(0.2, 0.2, 0.2, 1), 
                 radius=[10, 10, 0, 10],  
                 size_hint_x=None,  # Remove automatic width expansion
                 width=self.width * 0.6,  # Explicitly set width to 60% of the parent width
