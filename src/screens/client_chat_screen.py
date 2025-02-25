@@ -31,7 +31,6 @@ class ClientChatScreen(Screen):
                 radius=[10, 10, 0, 10],  
                 size_hint_x=None,  # Remove automatic width expansion
                 width=self.width * 0.6,  # Explicitly set width to 60% of the parent width
-                pos_hint={"right": 0.97}  # Align to the right
             )
 
             # Create the message label (multiline + right-aligned text)
@@ -53,7 +52,7 @@ class ClientChatScreen(Screen):
             outer_box = MDBoxLayout(
                 size_hint_x=1,  
                 adaptive_height=True,
-                padding=[0, 5],  
+                padding=[10, 5],  
                 md_bg_color=(0, 0, 0, 0)  
             )
             outer_box.add_widget(Widget())  # Add an empty widget for left spacing
@@ -75,11 +74,10 @@ class ClientChatScreen(Screen):
             message_container = MDBoxLayout(
                 adaptive_height=True,  
                 padding=[10, 8, 15, 8],  # Add spacing inside
-                md_bg_color=(0.2, 0.2, 0.2, 1), 
-                radius=[10, 10, 0, 10],  
+                md_bg_color=(0.3, 0.3, 1, 1), 
+                radius=[10, 10, 10, 0],  
                 size_hint_x=None,  # Remove automatic width expansion
                 width=self.width * 0.6,  # Explicitly set width to 60% of the parent width
-                pos_hint={"right": 0.03}  # Align to the left
             )
 
             # Create the message label (multiline + left-aligned text)
@@ -101,10 +99,16 @@ class ClientChatScreen(Screen):
             outer_box = MDBoxLayout(
                 size_hint_x=1,  
                 adaptive_height=True,
-                padding=[0, 5],  
+                padding=[10, 5],  
                 md_bg_color=(0, 0, 0, 0)  
             )
             outer_box.add_widget(message_container)  
             outer_box.add_widget(Widget())  # Add an empty widget for right spacing
 
             self.ids.chat_list.add_widget(outer_box)
+            
+            # Ensure new messages push previous ones UP instead of appearing at the top
+            self.ids.chat_list_container.height = self.ids.chat_list.minimum_height  
+            if self.ids.chat_list.height > self.ids.chat_scroll.height:
+                # Scroll to the latest message
+                Clock.schedule_once(lambda dt: self.ids.chat_list_container.parent.scroll_to(outer_box), 0.1)
