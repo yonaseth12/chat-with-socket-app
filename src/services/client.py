@@ -40,22 +40,22 @@ class Client:
                 if message_leng:                                        # There is an automatic blank message sent during connection initiation
                     message_length = int(message_leng)
                     message = self.client.recv(message_length).decode(self.FORMAT)
-                    if message == self.DISCONNECT_MESSAGE:
-                        is_alive = False
-                        self.client_callback_functions.user_has_disconnected()
-                        self.client.close()
-                    else:
-                        self.client_callback_functions.receive_message(message)
+                    self.client_callback_functions.receive_message(message)
                     print(f'[NEW MESSAGE] Incoming : {message}')
         except Exception as e:
-            self.client_callback_functions.user_has_disconned()
+            self.client_callback_functions.user_has_disconnected()
             self.client.close()
 
     def send_handler(self):
         try:
-            while True:
+            is_alive = True
+            while is_alive:
                 if self.sendbtn_pressed:
                     if self.message_to_send:
+                        if self.message_to_send == self.DISCONNECT_MESSAGE:
+                            is_alive = False
+                            self.client_callback_functions.user_has_disconnected()
+                            self.client.close()
                         self.send(self.message_to_send)
                     self.sendbtn_pressed = False
                 time.sleep(1)
