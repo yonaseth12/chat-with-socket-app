@@ -16,12 +16,22 @@
 
         # 📌 Chat Area (Scrollable messages list)
         ScrollView:
+            id: chat_scroll
             size_hint_y: 0.8
             pos_hint: {"top": 0.9}
             do_scroll_x: False
+            do_scroll_y: True  # Ensure vertical scrolling is enabled
 
-            MDList:
-                id: chat_list  # Container for chat messages
+            BoxLayout:
+                id: chat_list_container
+                orientation: 'vertical'
+                size_hint_y: None
+                height: self.minimum_height  # Make the container fit its children dynamically
+                padding: [0, 10]  # Add bottom padding for spacing
+                spacing: 5
+
+                MDList:
+                    id: chat_list  # Container for chat messages
 
         # 📌 Bottom Input Field 
         MDFloatLayout:

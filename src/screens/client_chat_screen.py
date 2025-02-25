@@ -3,6 +3,7 @@ from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivymd.uix.boxlayout import MDBoxLayout
 from kivy.lang import Builder
+from kivy.clock import Clock
 import os
 
 current_dir = os.path.dirname(__file__) 
@@ -59,6 +60,12 @@ class ClientChatScreen(Screen):
             outer_box.add_widget(message_container)  
 
             self.ids.chat_list.add_widget(outer_box)
+            
+            # Ensure new messages push previous ones UP instead of appearing at the top
+            self.ids.chat_list_container.height = self.ids.chat_list.minimum_height  
+            if self.ids.chat_list.height > self.ids.chat_scroll.height:
+                # Scroll to the latest message
+                Clock.schedule_once(lambda dt: self.ids.chat_list_container.parent.scroll_to(outer_box), 0.1)
 
             self.ids.message_input.text = ""
 
