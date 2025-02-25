@@ -38,10 +38,21 @@ class Server():
     def initiate_request_handler(self):
         admin_thread = threading.Thread(target=self.server_admin)
         admin_thread.start()
+
+        #  Starting the server loop in a separate daemon thread
+        self.server_thread = threading.Thread(target=self.accept_connections, daemon=True)
+        self.server_thread.start()
+    
+    def accept_connections(self):
         while True:
-            conn, address = self.server.accept()
-            new_thread = threading.Thread(target=self.handle_client, args=(conn, address))
-            new_thread.start()
+            try:
+                conn, address = self.server.accept()
+                print(f"[NEW CONNECTION] from {address}")
+                new_thread = threading.Thread(target=self.handle_client, args=(conn, address), daemon=True)
+                new_thread.start()
+            except Exception as e:
+                print(f"Error accepting connection: {e}")
+                break 
             
     def server_admin(self):
         try:
