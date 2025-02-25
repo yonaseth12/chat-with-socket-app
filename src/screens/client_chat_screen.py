@@ -2,6 +2,7 @@ from kivy.uix.screenmanager import Screen
 from kivy.uix.label import Label
 from kivy.uix.widget import Widget
 from kivymd.uix.boxlayout import MDBoxLayout
+from kivymd.app import MDApp
 from kivy.lang import Builder
 from kivy.clock import Clock
 import os
@@ -19,10 +20,33 @@ except Exception as e:
 
 
 class ClientChatScreen(Screen):
+    
+    # Clearing All Previous Messages 
+    def on_pre_enter(self):
+        self.ids.chat_list.clear_widgets()
+        
+    def on_enter(self):
+        self.callback_functions = {
+            "receive_message": self.receive_message,
+            "user_has_disconnected": self.user_has_disconnected
+        }
+        app = MDApp.get_running_app()
+        app.user_shared_data["user_client"].refer_client_callbacks(self.callback_functions)
+        app.user_shared_data["user_client"].start()
+        
 
     def send_message(self):
         message_text = self.ids.message_input.text.strip()
         if message_text:
+            
+            # Send the message to the server
+            app = MDApp.get_running_app()
+            app.user_shared_data["user_client"].message_to_send = message_text
+            app.user_shared_data["user_client"].sendbtn_pressed = True
+            
+            
+            
+        
             # Create a container for each message 
             message_container = MDBoxLayout(
                 adaptive_height=True,  
@@ -112,3 +136,6 @@ class ClientChatScreen(Screen):
             if self.ids.chat_list.height > self.ids.chat_scroll.height:
                 # Scroll to the latest message
                 Clock.schedule_once(lambda dt: self.ids.chat_list_container.parent.scroll_to(outer_box), 0.1)
+                
+    def user_has_disconnected(self):
+        pass
