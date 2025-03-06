@@ -1,3 +1,4 @@
+from kivy.clock import Clock
 import socket
 import threading
 import time
@@ -5,7 +6,7 @@ import time
 class Server():
     def __init__(self, PORT = None):
         self.PORT = PORT if PORT else 5050
-        self.SERVER = socket.gethostbyname(socket.gethostname())
+        self.SERVER = self.get_local_ip() #socket.gethostbyname(socket.gethostname())
         self.set_address(self.SERVER, self.PORT)
 
         self.HEADER_LENGTH = 64
@@ -19,6 +20,16 @@ class Server():
         self.server = self.create_server(socket.AF_INET, socket.SOCK_STREAM)
         self.server.bind(self.ADDR)
 
+    def get_local_ip(self):
+        try:
+            # Create a dummy socket connection to an external server
+            s = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+            s.connect(("8.8.8.8", 80))  # Google's public DNS server
+            local_ip = s.getsockname()[0]
+            s.close()
+            return local_ip
+        except Exception as e:
+            return f"Error: {e}"
 
     def set_address(self, SERVER, PORT):
         self.ADDR = (SERVER, PORT)
@@ -42,7 +53,7 @@ class Server():
         #  Starting the server loop in a separate daemon thread
         self.server_thread = threading.Thread(target=self.accept_connections, daemon=True)
         self.server_thread.start()
-    
+        
     def accept_connections(self):
         while True:
             try:
@@ -62,20 +73,20 @@ class Server():
                     if self.message_to_send:
                         if self.message_to_send == self.DISCONNECT_MESSAGE:
                             is_alive = False
-                            self.server_callback_functions.user_has_disconnected()
+                            self.server_callback_functions["user_has_disconnected"]()
                             self.server.close()
                         self.send(self.message_to_send)
                     self.sendbtn_pressed = False
                 time.sleep(1)
             
         except Exception as e:
-            print("Connection has been lost")
+            print(f"Connection has been lost {e}")
             
     def send(self, message):
         message = message.encode(self.FORMAT)
         msg_length = len(message)
         send_length = str(msg_length).encode(self.FORMAT)
-        send_length += b' ' * (self.HEADER - len(send_length))
+        send_length += b' ' * (self.HEADER_LENGTH - len(send_length))
         self.broadcast_message(None, send_length, message)
             
             
@@ -93,14 +104,14 @@ class Server():
                     message = message_encoded.decode(self.FORMAT)
                     if message == self.DISCONNECT_MESSAGE:
                         is_alive = False
-                        self.server_callback_functions.user_has_disconnected()
+                        self.server_callback_functions["user_has_disconnected"]()
                         conn.close()
                     else:
-                        self.server_callback_functions.receive_message(address, message)
+                        Clock.schedule_once(lambda dt: self.server_callback_functions["receive_message"](address, message))
                     print(f'[NEW MESSAGE] from {address} : {message}')
                     # Broadcast the message to all other clients
                     try:
-                        self.server_callback_functions.receive_message(message)
+                        Clock.schedule_once(lambda dt: self.server_callback_functions["receive_message"](address, message))
                         self.broadcast_message(conn, message_leng_encoded, message_encoded)
                     except e:
                         print(f'[BROADCAST ERROR] {e}')
@@ -108,7 +119,7 @@ class Server():
             print(f'[CLOSE CONNECTION] {address} is disconnected.')
             del self.connected_clients[threading.current_thread().ident]
         except Exception as e:
-            self.server_callback_functions.user_has_disconnected()
+            self.server_callback_functions["user_has_disconnected"]()
             conn.close()
         
     

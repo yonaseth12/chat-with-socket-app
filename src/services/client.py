@@ -1,3 +1,4 @@
+from kivy.clock import Clock
 from binascii import Error
 import socket
 import threading
@@ -27,7 +28,7 @@ class Client:
         message = message.encode(self.FORMAT)
         msg_length = len(message)
         send_length = str(msg_length).encode(self.FORMAT)
-        send_length += b' ' * (self.HEADER - len(send_length))
+        send_length += b' ' * (self.HEADER_LENGTH - len(send_length))
         self.client.send(send_length)
         self.client.send(message)
 
@@ -40,10 +41,10 @@ class Client:
                 if message_leng:                                        # There is an automatic blank message sent during connection initiation
                     message_length = int(message_leng)
                     message = self.client.recv(message_length).decode(self.FORMAT)
-                    self.client_callback_functions.receive_message(message)
+                    Clock.schedule_once(lambda dt: self.client_callback_functions["receive_message"](message))
                     print(f'[NEW MESSAGE] Incoming : {message}')
         except Exception as e:
-            self.client_callback_functions.user_has_disconnected()
+            self.client_callback_functions["user_has_disconnected"]()
             self.client.close()
 
     def send_handler(self):
@@ -54,7 +55,7 @@ class Client:
                     if self.message_to_send:
                         if self.message_to_send == self.DISCONNECT_MESSAGE:
                             is_alive = False
-                            self.client_callback_functions.user_has_disconnected()
+                            self.client_callback_functions["user_has_disconnected"]()
                             self.client.close()
                         self.send(self.message_to_send)
                     self.sendbtn_pressed = False

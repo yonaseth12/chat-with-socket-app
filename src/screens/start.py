@@ -25,7 +25,7 @@ class ChatApp(MDApp):
         if platform in ('android', 'ios'):
             Window.fullscreen = 'auto'
         else:
-            Window.size = (800, 600)
+            Window.size = (300, 600)
         
         # Setting theme properties
         self.theme_cls.theme_style = 'Dark'
