@@ -106,8 +106,8 @@ class Server():
                         is_alive = False
                         self.server_callback_functions["user_has_disconnected"]()
                         conn.close()
-                    else:
-                        Clock.schedule_once(lambda dt: self.server_callback_functions["receive_message"](address, message))
+                    # else:
+                    #     Clock.schedule_once(lambda dt: self.server_callback_functions["receive_message"](address, message))
                     print(f'[NEW MESSAGE] from {address} : {message}')
                     # Broadcast the message to all other clients
                     try:
